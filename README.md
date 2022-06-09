@@ -1,6 +1,6 @@
 # Express Server Example
 
-This example shows A simple Express project mongoose 
+This example shows A simple Express project with mongoose 
 
 ## Getting started
 

@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const reservationsSchema = new Schema({
-    roomNumber: String,
+    numberOfBeds: Number,
+    numberOfPeople: Number,
+    roomType: String,
     status: String,
     createAt: Date,
     startAt: Date,

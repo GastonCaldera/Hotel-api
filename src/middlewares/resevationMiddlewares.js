@@ -2,23 +2,48 @@ const { RoomsModel } = require('../models/rooms')
 const { reservationsModel } = require('../models/reservations')
 const moment = require('moment')
 
+const ROOM_TYPES = ['normal', 'premium']
+
 const resevationMiddlewares = {
     create: async (req, res, next) => {
         try {
             const body = req.body
-            
+
             // Check room
-            if (!body.hasOwnProperty("room")) {
-                return res.status(400).json({ "s": false, "m": "must insert a room", "d": "" })
+            if (!body.hasOwnProperty("roomNumber")) {
+                return res.status(400).json({ "s": false, "m": "must insert a roomNumber", "d": "" })
             }
-            else if (typeof body?.room !== 'string') {
+            else if (typeof body?.roomNumber !== 'string') {
                 return res.status(400).json({ "s": false, "m": "room have to be a string", "d": "" })
             }
-            const room = await RoomsModel.findOne({ room: body.room }).exec()
+            const room = await RoomsModel.findOne({ room: body.roomNumber }).exec()
             if (room === null) {
                 return res.status(400).json({ "s": false, "m": `room ${body.room} not found`, "d": "" })
             }
-            
+
+            // Check Keys
+            if (!body.hasOwnProperty("numberOfBeds")) {
+                return res.status(400).json({ "s": false, "m": "numberOfBeds insert a id", "d": "" })
+            }
+            else if (typeof body?.numberOfBeds !== 'number') {
+                return res.status(400).json({ "s": false, "m": "numberOfBeds have to be a number", "d": "" })
+            }
+            else if (!body.hasOwnProperty("numberOfPeople")) {
+                return res.status(400).json({ "s": false, "m": "must insert a numberOfPeople", "d": "" })
+            }
+            else if (typeof body?.numberOfPeople !== 'number') {
+                return res.status(400).json({ "s": false, "m": "numberOfPeople have to be a number", "d": "" })
+            }
+            else if (!body.hasOwnProperty("roomType")) {
+                return res.status(400).json({ "s": false, "m": "must insert a roomType", "d": "" })
+            }
+            else if (typeof body?.roomType !== 'string') {
+                return res.status(400).json({ "s": false, "m": "roomType have to be a string", "d": "" })
+            }
+            else if (!ROOM_TYPES.includes(body?.roomType)) {
+                return res.status(400).json({ "s": false, "m": "roomType must be between only normal or premium", "d": "" })
+            }
+
             // Check dates
             if (!body.hasOwnProperty("startAt")) {
                 return res.status(400).json({ "s": false, "m": "must insert a startAt", "d": "" })
@@ -38,11 +63,12 @@ const resevationMiddlewares = {
             else if (!moment(body?.endAt, 'YYYY-MM-DD').isValid()) {
                 return res.status(400).json({ "s": false, "m": "you need to insert a valit endAt date (YYYY-MM-DD)", "d": "" })
             }
-            else if (moment(body?.startAt).isSameOrAfter(moment(body?.endAt))){
+            else if (moment(body?.startAt).isSameOrAfter(moment(body?.endAt))) {
                 return res.status(400).json({ "s": false, "m": "start date cannot start after end date", "d": "" })
             }
+
             const reservations = await reservationsModel.findOne({
-                room: body.room,
+                roomNumber: body.roomNumber,
                 status: { $ne: 'eliminated' },
                 $or: [
                     {
@@ -62,7 +88,7 @@ const resevationMiddlewares = {
             if (reservations !== null) {
                 return res.status(400).json({ "s": false, "m": "there is already a reservation with those dates", "d": "" })
             }
-
+            
             next();
         } catch (error) {
             console.log(error)
@@ -72,7 +98,7 @@ const resevationMiddlewares = {
     pay: async (req, res, next) => {
         try {
             const body = req.body
-            
+
             // Check Keys
             if (!body.hasOwnProperty("id")) {
                 return res.status(400).json({ "s": false, "m": "must insert a id", "d": "" })

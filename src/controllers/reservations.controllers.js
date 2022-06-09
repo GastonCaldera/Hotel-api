@@ -1,4 +1,5 @@
 const { reservationsModel } = require('../models/reservations')
+const { PaymentsModel } = require('../models/payments')
 const moment = require('moment')
 
 const reservationsController = {
@@ -36,6 +37,11 @@ const reservationsController = {
                 {
                     new: true
                 })
+
+            await PaymentsModel.create({
+                ...body,
+                createAt: moment(),
+            })
             return res.json({ "s": true, "m": "reservation paid successfully", "d": cancelResevation })
         } catch (error) {
             console.log(error)
