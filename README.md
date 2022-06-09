@@ -1,6 +1,6 @@
 # Express Server Example
 
-This example shows A simple express project mongoose 
+This example shows A simple Express project mongoose 
 
 ## Getting started
 
@@ -12,9 +12,9 @@ Download this example:
 npm install
 ```
 
-### 2. Start the express server
+### 2. Start the Express server
 
-Launch your GraphQL server with this command:
+Launch your Express server with this command:
 
 ```
 npm run dev
