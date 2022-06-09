@@ -16,5 +16,5 @@ const reservationsSchema = new Schema({
     paymentType: String
 });
 
-const reservationsModel = mongoose.model("reservations", reservationsSchema);
-module.exports = { reservationsModel };
+const ReservationsModel = mongoose.model("reservations", reservationsSchema);
+module.exports = { ReservationsModel };

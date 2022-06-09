@@ -1,5 +1,5 @@
 const { RoomsModel } = require('../models/rooms')
-const { reservationsModel } = require('../models/reservations')
+const { ReservationsModel } = require('../models/reservations')
 const moment = require('moment')
 
 const ROOM_TYPES = ['normal', 'premium']
@@ -14,11 +14,11 @@ const resevationMiddlewares = {
                 return res.status(400).json({ "s": false, "m": "must insert a roomNumber", "d": "" })
             }
             else if (typeof body?.roomNumber !== 'string') {
-                return res.status(400).json({ "s": false, "m": "room have to be a string", "d": "" })
+                return res.status(400).json({ "s": false, "m": "roomNumber have to be a string", "d": "" })
             }
             const room = await RoomsModel.findOne({ room: body.roomNumber }).exec()
             if (room === null) {
-                return res.status(400).json({ "s": false, "m": `room ${body.room} not found`, "d": "" })
+                return res.status(400).json({ "s": false, "m": `room ${body.roomNumber} not found`, "d": "" })
             }
 
             // Check Keys
@@ -67,7 +67,7 @@ const resevationMiddlewares = {
                 return res.status(400).json({ "s": false, "m": "start date cannot start after end date", "d": "" })
             }
 
-            const reservations = await reservationsModel.findOne({
+            const reservations = await ReservationsModel.findOne({
                 roomNumber: body.roomNumber,
                 status: { $ne: 'eliminated' },
                 $or: [
@@ -88,7 +88,7 @@ const resevationMiddlewares = {
             if (reservations !== null) {
                 return res.status(400).json({ "s": false, "m": "there is already a reservation with those dates", "d": "" })
             }
-            
+
             next();
         } catch (error) {
             console.log(error)
@@ -144,7 +144,7 @@ const resevationMiddlewares = {
             }
 
             // Check resevation
-            const reservations = await reservationsModel.findOne({ _id: body.id }).exec()
+            const reservations = await ReservationsModel.findOne({ _id: body.id }).exec()
             if (reservations === null) {
                 return res.status(400).json({ "s": false, "m": "there is no reservation with that ID", "d": "" })
             }
@@ -167,7 +167,7 @@ const resevationMiddlewares = {
             if (!body.hasOwnProperty("id")) {
                 return res.status(400).json({ "s": false, "m": "must insert a id", "d": "" })
             }
-            const reservations = await reservationsModel.findOne({ _id: body.id }).exec()
+            const reservations = await ReservationsModel.findOne({ _id: body.id }).exec()
             if (reservations === null) {
                 return res.status(400).json({ "s": false, "m": "there is no reservation with that ID", "d": "" })
             }

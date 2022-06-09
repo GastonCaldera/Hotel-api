@@ -17,6 +17,7 @@ app.use(cors({
 
 //routes
 app.use('/reservations', require("./routes/reservations.js"));
+app.use('/rooms', require("./routes/rooms.js"));
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {

@@ -1,4 +1,4 @@
-const { reservationsModel } = require('../models/reservations')
+const { ReservationsModel } = require('../models/reservations')
 const { PaymentsModel } = require('../models/payments')
 const moment = require('moment')
 
@@ -6,7 +6,7 @@ const reservationsController = {
     create: async (req, res) => {
         try {
             const body = req.body
-            const createResevation = await reservationsModel.create({
+            const createResevation = await ReservationsModel.create({
                 ...body,
                 createAt: moment(),
                 isPay: false,
@@ -22,7 +22,7 @@ const reservationsController = {
     pay: async (req, res) => {
         try {
             const body = req.body
-            const cancelResevation = await reservationsModel.findOneAndUpdate(
+            const cancelResevation = await ReservationsModel.findOneAndUpdate(
                 {
                     _id: body.id
                 },
@@ -51,7 +51,7 @@ const reservationsController = {
     cancel: async (req, res) => {
         try {
             const body = req.body
-            const cancelResevation = await reservationsModel.findOneAndUpdate(
+            const cancelResevation = await ReservationsModel.findOneAndUpdate(
                 {
                     _id: body.id
                 },
@@ -70,7 +70,7 @@ const reservationsController = {
     list: async (req, res) => {
         try {
             const body = req.body
-            const reservations = await reservationsModel.find().limit(body.limit).skip(body.skip)
+            const reservations = await ReservationsModel.find().limit(body.limit).skip(body.skip)
             return res.json({ "s": true, "m": "reservations listed successfully", "d": reservations })
         } catch (error) {
             console.log(error)
