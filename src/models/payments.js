@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const paymentsSchema = new Schema({
+    reservationId: String,
     country: String,
     street: String,
     postalCode: String,

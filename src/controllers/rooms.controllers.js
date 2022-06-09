@@ -19,7 +19,7 @@ const roomsController = {
     update: async (req, res) => {
         try {
             const body = req.body
-            const cancelResevation = await RoomsModel.findOneAndUpdate(
+            const updateRoom = await RoomsModel.findOneAndUpdate(
                 {
                     room: body.room
                 },
@@ -30,7 +30,7 @@ const roomsController = {
                     new: true
                 })
 
-            return res.json({ "s": true, "m": "room updated successfully", "d": cancelResevation })
+            return res.json({ "s": true, "m": "room updated successfully", "d": updateRoom })
         } catch (error) {
             console.log(error)
             return res.status(400).json({ "s": false, "m": "server error", "d": "" })
@@ -52,8 +52,8 @@ const roomsController = {
     list: async (req, res) => {
         try {
             const body = req.body
-            const reservations = await RoomsModel.find().limit(body.limit).skip(body.skip)
-            return res.json({ "s": true, "m": "rooms listed successfully", "d": reservations })
+            const rooms = await RoomsModel.find().limit(body.limit).skip(body.skip)
+            return res.json({ "s": true, "m": "rooms listed successfully", "d": rooms })
         } catch (error) {
             console.log(error)
             return res.status(400).json({ "s": false, "m": "server error", "d": "" })

@@ -22,7 +22,7 @@ const reservationsController = {
     pay: async (req, res) => {
         try {
             const body = req.body
-            const cancelResevation = await ReservationsModel.findOneAndUpdate(
+            const payResevation = await ReservationsModel.findOneAndUpdate(
                 {
                     _id: body.id
                 },
@@ -40,9 +40,10 @@ const reservationsController = {
 
             await PaymentsModel.create({
                 ...body,
+                reservationId: body.id,
                 createAt: moment(),
             })
-            return res.json({ "s": true, "m": "reservation paid successfully", "d": cancelResevation })
+            return res.json({ "s": true, "m": "reservation paid successfully", "d": payResevation })
         } catch (error) {
             console.log(error)
             return res.status(400).json({ "s": false, "m": "server error", "d": "" })
