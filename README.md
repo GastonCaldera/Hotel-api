@@ -1,4 +1,4 @@
-# GraphQL Server Example
+# Express Server Example
 
 This example shows A simple express project mongoose 
 
